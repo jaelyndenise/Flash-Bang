@@ -113,7 +113,6 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showBack, setShowBack] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [formStatus, setFormStatus] = useState(false);
   const [formType, setFormType] = useState<string>('add');
 
