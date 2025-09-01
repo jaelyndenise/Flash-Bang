@@ -4,11 +4,11 @@ const theme = createTheme({
   palette: {
     mode: "light", // Change to 'dark' for dark mode
     primary: {
-      main: "#4f46e5", // Indigo-600
+      main: "#1e293b", // Indigo-600
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#f43f5e", // Rose-500
+      main: "#6b0516ff", // Rose-500
       contrastText: "#ffffff",
     },
     background: {

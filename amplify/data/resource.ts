@@ -24,6 +24,7 @@ const schema = a.schema({
     .model({
       title: a.string(),
       description: a.string(),
+      flashcards: a.id().array(),
     })
     .authorization((allow) => [allow.owner()]),
 });

@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Authenticator } from "@aws-amplify/ui-react";
 import App from "./App.tsx";
-import Settings from "./Settings.tsx"; // import your settings page
 import "./index.css";
 import "@aws-amplify/ui-react/styles.css";
 import { Amplify } from "aws-amplify";
@@ -20,7 +19,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<App />} />
-            <Route path="/settings" element={<Settings />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

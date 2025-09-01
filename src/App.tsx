@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import { useNavigate } from "react-router-dom";
 import { generateClient } from "aws-amplify/data";
 import {
   Box,
@@ -19,15 +18,16 @@ import {
   Typography
 } from '@mui/material';
 import { ChevronLeft, ChevronRight, Edit, Menu, Trash } from 'lucide-react';
+import theme from "./theme.ts";
 
 const client = generateClient<Schema>();
 
 function App() {
-  const { user, signOut } = useAuthenticator();
-   const navigate = useNavigate();
+  const { signOut } = useAuthenticator();
   const [flashcards, setFlashcards] = useState<Array<Schema["Flashcard"]["type"]>>([]);
-
+  
   useEffect(() => {
+    console.log(client.models);
     client.models.Flashcard.observeQuery().subscribe({
       next: (data) => setFlashcards([...data.items]),
     });
@@ -92,7 +92,7 @@ function App() {
     closeForm();
   };
 
-  const editFlashcard = async (card: { id: string; front?: string; back?: string }) => {
+  const editFlashcard = async (card: { id: string; front?: string; back?: string; }) => {
     try {
       const response = await client.models.Flashcard.update({
         id: card.id,       // required
@@ -113,6 +113,7 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showBack, setShowBack] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [formStatus, setFormStatus] = useState(false);
   const [formType, setFormType] = useState<string>('add');
 
@@ -159,7 +160,7 @@ function App() {
     <Box>
       {flashcards.length === 0 ? 
       <Box>
-        <Typography>{user?.username}'s Flashcards</Typography>
+        <Typography variant="h1">Your Flashcards</Typography>
         <Typography>No flashcards available.</Typography>
           <Button onClick={() => {
             setFormType('add'); 
@@ -210,22 +211,54 @@ function App() {
       </Box>
       :
       <Box>
-        <Menu onClick={handleMenu} />
-        <Typography>{user?.username}'s Flashcards</Typography>
+        <Menu 
+         onClick={handleMenu}
+          style={{
+            cursor: "pointer",
+            position: "fixed",   // fix to viewport
+            top: 10,             // distance from top
+            left: 10,            // distance from left
+            zIndex: 1,        // above other content
+          }}
+          size={32}              // optional, make it bigger
+        />
+        <Typography variant="h1">Your Flashcards</Typography>
 
         {/* Sidebar Navigation */}
-        <Drawer open={openMenu} onClose={handleMenu}>
-          <Menu onClick={handleMenu} />
-          {flashcards.map((card) => (
-              <li
+        <Drawer 
+          open={openMenu} 
+          onClose={handleMenu}
+          PaperProps={{
+            sx: {
+              width: 300,             
+              height: "100%",         
+              backgroundColor: "#1e293b", 
+              color: "white",        
+              padding: 2,            
+            },
+          }}
+        >
+          <ChevronLeft size={38} onClick={handleMenu} 
+            style={{
+              zIndex: 1000,
+              position: "relative",
+              left: 240,
+              cursor: "pointer",
+              paddingBottom: 10,
+            }}/>
+          {flashcards.map((card, index) => (
+              <Typography
                 key={card.id}
                 onClick={() => selectCard(card.id)}
+                sx={{
+                  cursor: "pointer",
+                  margin: 1
+                }}
               >
-                {card.front}
-              </li>
+                {index + 1}. {card.front}
+              </Typography>
             ))}
-          <Button onClick={() => navigate('/settings')}>Settings</Button>
-          <Button onClick={signOut}>Sign out</Button>
+          <Button onClick={signOut} sx={{ mt: "auto", color: theme.palette.text.secondary }}>Sign out</Button>
         </Drawer>
 
         {/* Flashcard Display */}
@@ -309,7 +342,7 @@ function App() {
                   prevCard();
                 }}
               >
-                <ChevronLeft size={32} />
+                <ChevronLeft size={48} />
               </Box>
 
               {/* Right Chevron */}
@@ -328,7 +361,7 @@ function App() {
                   nextCard();
                 }}
               >
-                <ChevronRight size={32} />
+                <ChevronRight size={48} />
               </Box>
             </Card>
           </Box>
