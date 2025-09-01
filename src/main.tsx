@@ -17,16 +17,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Authenticator
       formFields={{
         signUp: {
-          firstName: {
-            label: "First Name",
-            placeholder: "Enter your first name",
-            isRequired: true,
-          },
-          lastName: {
-            label: "Last Name",
-            placeholder: "Enter your last name",
-            isRequired: true,
-          },
           email: {
             label: "Email",
             placeholder: "Enter your email",
