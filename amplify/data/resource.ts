@@ -12,7 +12,23 @@ const schema = a.schema({
       content: a.string(),
     })
     .authorization((allow) => [allow.owner()]),
+
+  Flashcard: a
+    .model({
+      front: a.string(),   // required
+      back: a.string(),    // required
+    })
+    .authorization((allow) => [allow.owner()]),
+
+  Deck: a
+    .model({
+      title: a.string(),
+      description: a.string(),
+      flashcards: a.id().array(),
+    })
+    .authorization((allow) => [allow.owner()]),
 });
+
 
 export type Schema = ClientSchema<typeof schema>;
 
